@@ -2,13 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Picture;
 use App\Entity\Product;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ProductType extends AbstractType
 {
@@ -16,7 +17,7 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('ref')
-            ->add('title')
+            ->add('title', TextType::class, [])
             ->add('description')
             ->add('price')
             ->add('inStock')
