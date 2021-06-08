@@ -30,12 +30,12 @@ class AppFixtures extends Fixture
             ->setUrl("https://dummyimage.com/200x100.png")
             ->setDescription("iezfj");
         $manager->persist($picture);
-                
+
         // Créer 3 Produits
         $products = [
             "Banana" => 3,
             "Apple" => 2,
-            "Grapes"=> 4
+            "Grapes" => 4
         ];
 
         $productEntity = [];
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
                 ->setStockQuantiy(42)
                 ->setCategory($category1)
                 ->addPicture($picture);
-                
+
             $productEntity[] = $fruit;
             $manager->persist($fruit);
         }
@@ -65,19 +65,19 @@ class AppFixtures extends Fixture
             ->setFirstName("Joe")
             ->setLastName("Crazy");
         $manager->persist($user);
-        
+
         // Créer 2 Lignes de commandes
         $orderLine = new OrderLine();
         $orderLine
             ->setQuantity(34);
         $manager->persist($orderLine);
-                
+
         // Créer 1 Commande
         $order = new Order();
         $order
             ->setCreatedAt(new \DateTime())
             ->setShippingAt(new \DateTime("2021-08-19"))
-            ->setTotal(42,2)
+            ->setTotal(42, 2)
             ->setValid(false)
             ->addOrderLine($orderLine)
             ->setUser($user);
