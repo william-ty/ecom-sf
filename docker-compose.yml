@@ -1,0 +1,57 @@
+version: "3.3"
+services:
+  php-fpm:
+    container_name: "ecomsf_container"
+    depends_on:
+      - mysql
+    build: Docker/php-fpm
+    ports:
+      - 8181:8000
+      # - 443:443
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - dev
+
+  mysql:
+    container_name: "ecomsf_database_container"
+    image: mysql:5.7.34
+
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ecom-sf
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - dev
+
+  maildev:
+    image: maildev/maildev
+    container_name: ecomsf_maildev_docker_symfony
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "8081:80"
+    restart: always
+    networks:
+      - dev
+
+  phpmyadmin:
+    container_name: ecomsf_phpmyadmin
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  db-data:
