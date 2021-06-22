@@ -1,4 +1,21 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+
+    {# Check if route is "product_edit", if so display pictures #}
+    {% if app.request.attributes.get('_route') == 'product_edit' %}
+        <h2>Pictures</h2>
+        {# Loop on pictures #}
+        {% for picture in product.picture %}
+            <div>
+                <img src="{{ asset('/uploads/' ~ picture.url) }}" alt="Picture" width="80">
+                <a href="{{ path('product_delete_picture', {id: picture.id}) }}"
+                {# data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}"> #} {#Todo = EDIT CSRF#}
+                >
+                    Delete
+                </a>
+            </div>
+        {% endfor %}
+
+    {% endif %}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

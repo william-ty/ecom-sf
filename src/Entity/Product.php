@@ -56,7 +56,7 @@ class Product
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Picture::class, inversedBy="products")
+     * @ORM\ManyToMany(targetEntity=Picture::class, inversedBy="products", cascade={"persist"})
      */
     private $picture;
 
@@ -177,4 +177,6 @@ class Product
 
         return $this;
     }
+
+
 }
