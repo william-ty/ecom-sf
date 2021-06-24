@@ -5,7 +5,7 @@
     {% if app.request.attributes.get('_route') == 'product_edit' %}
         <h2>Pictures</h2>
         {# Loop on pictures #}
-        {% for picture in product.picture %}
+        {% for picture in product.pictures %}
             <div>
                 <img src="{{ asset('/uploads/' ~ picture.url) }}" alt="Picture" width="80">
                 <a href="{{ path('product_delete_picture', {id: picture.id}) }}"

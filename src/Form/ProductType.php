@@ -31,7 +31,7 @@ class ProductType extends AbstractType
                 'choice_label' => 'label'
             ])
             // Picture Upload
-            ->add('pictures', FileType::class, [
+            ->add('picture', FileType::class, [
                 'label' => false,
                 'multiple' => true,
                 'mapped' => false,

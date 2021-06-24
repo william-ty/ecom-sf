@@ -30,14 +30,11 @@ class Picture
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="picture")
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="pictures")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $products;
+    private $product;
 
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -68,34 +65,20 @@ class Picture
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
+    public function getProduct(): ?Product
     {
-        return $this->products;
+        return $this->product;
     }
-
-    public function addProduct(Product $product): self
+    
+    public function setProduct(?Product $product): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->addPicture($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removePicture($this);
-        }
-
+        $this->product = $product;
+        
         return $this;
     }
 
     public function __toString() {
-        $this->url;
+        return $this->url;
     }
+
 }

@@ -84,7 +84,7 @@ class ProductController extends AbstractController
 
             //? Pictures Uploading ?//
             // Get uploaded pictures
-            $pictures = $form->get('pictures')->getData();
+            $pictures = $form->get('picture')->getData();
 
             // Loop on pictures
             foreach($pictures as $picture) {
@@ -148,10 +148,11 @@ class ProductController extends AbstractController
             // Return a JSON response
             // return new JsonResponse(['success' => 1]);
 
+            // TODO = Delete and Display PlaceHolders (no file stored)
         // } else {
             // return new JsonResponse(['error' => 'Invalid Token'], 400);
         // }
-
+            
         // TODO = REDIRECT TO PRDUCT VIEW
         return new Response("Coucou!");
 
