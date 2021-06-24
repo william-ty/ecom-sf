@@ -56,13 +56,14 @@ class Product
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Picture::class, inversedBy="products", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
-    private $picture;
+    private $pictures;
 
     public function __construct()
     {
-        $this->picture = new ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,15 +158,16 @@ class Product
     /**
      * @return Collection|Picture[]
      */
-    public function getPicture(): Collection
+    public function getPictures(): Collection
     {
-        return $this->picture;
+        return $this->pictures;
     }
 
     public function addPicture(Picture $picture): self
     {
-        if (!$this->picture->contains($picture)) {
-            $this->picture[] = $picture;
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+            $picture->setProduct($this);
         }
 
         return $this;
@@ -173,10 +175,17 @@ class Product
 
     public function removePicture(Picture $picture): self
     {
-        $this->picture->removeElement($picture);
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getProduct() === $this) {
+                $picture->setProduct(null);
+            }
+        }
 
         return $this;
     }
 
-
+    public function __toString() {
+        return $this->title;
+    }    
 }

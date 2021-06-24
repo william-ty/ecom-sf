@@ -5,12 +5,12 @@ namespace App\Controller;
 use App\Entity\Picture;
 use App\Entity\Product;
 use App\Form\ProductType;
+use Doctrine\ORM\Mapping\Entity;
 use App\Repository\ProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/product')]
 class ProductController extends AbstractController
@@ -34,7 +34,7 @@ class ProductController extends AbstractController
 
             //? Pictures Uploading ?//
             // Get uploaded pictures
-            $pictures = $form->get('pictures')->getData();
+            $pictures = $form->get('picture')->getData();
 
             // Loop on pictures
             foreach($pictures as $picture) {
@@ -84,7 +84,7 @@ class ProductController extends AbstractController
 
             //? Pictures Uploading ?//
             // Get uploaded pictures
-            $pictures = $form->get('pictures')->getData();
+            $pictures = $form->get('picture')->getData();
 
             // Loop on pictures
             foreach($pictures as $picture) {
@@ -128,33 +128,25 @@ class ProductController extends AbstractController
 
     //? To delete a picture 
     #[Route('/delete/picture/{id}', name: 'product_delete_picture', methods: ['GET'])]
-    public function deletePicture(Picture $picture, Request $request) {
-        $data = json_decode($request->getContent(), true);
+    public function deletePicture(Request $request, Picture $picture) {
 
-        //TODO = Deploy CSRF vs JWT
+        //TODO [UPGRADE] = Deploy CSRF vs JWT
         // Check if token is valid
-        // if($this->isCsrfTokenValid('delete'.$picture->getId(), $data['_token'])) {
-            // Get the name of the picture
-            $url = $picture->getUrl();
 
-            // Delete the file
-            unlink($this->getParameter('pictures_directory').'/'.$url);            
+        // Get the name of the picture
+        $url = $picture->getUrl();
 
-            // Delete the entry in the database
-            $entityManager= $this->getDoctrine()->getManager();
-            $entityManager->remove($picture);
-            $entityManager->flush();
+        // Delete the file
+        unlink($this->getParameter('pictures_directory').'/'.$url);            
 
-            // Return a JSON response
-            // return new JsonResponse(['success' => 1]);
-
-        // } else {
-            // return new JsonResponse(['error' => 'Invalid Token'], 400);
-        // }
-
-        // TODO = REDIRECT TO PRDUCT VIEW
-        return new Response("Coucou!");
-
-        // TODO = UPDATE ENTITIES (Picture Relation to Product, delete product_picture)
+        // Delete the entry in the database
+        $entityManager= $this->getDoctrine()->getManager();
+        $entityManager->remove($picture);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('product_edit', ['id' => $request->query->get("product_id")]);
+        
+        // TODO [UPGRADE] = Delete and Display PlaceHolders (no file stored)
+        // TODO [UPGRADE] = UPDATE ENTITIES (Picture Relation to Product, delete product_picture)
     }
 }

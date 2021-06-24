@@ -5,10 +5,10 @@
     {% if app.request.attributes.get('_route') == 'product_edit' %}
         <h2>Pictures</h2>
         {# Loop on pictures #}
-        {% for picture in product.picture %}
+        {% for picture in product.pictures %}
             <div>
                 <img src="{{ asset('/uploads/' ~ picture.url) }}" alt="Picture" width="80">
-                <a href="{{ path('product_delete_picture', {id: picture.id}) }}"
+                <a href="{{ path('product_delete_picture', {product_id: product.id, id: picture.id}) }}"
                 {# data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}"> #} {#Todo = EDIT CSRF#}
                 >
                     Delete

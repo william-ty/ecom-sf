@@ -14,8 +14,7 @@ class PictureType extends AbstractType
         $builder
             ->add('url')
             ->add('description')
-            // TODO
-            // ->add('products')
+            ->add('product')
         ;
     }
 
