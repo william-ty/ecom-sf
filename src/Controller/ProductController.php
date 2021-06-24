@@ -128,34 +128,28 @@ class ProductController extends AbstractController
 
     //? To delete a picture 
     #[Route('/delete/picture/{id}', name: 'product_delete_picture', methods: ['GET'])]
-    public function deletePicture(Picture $picture, Request $request) {
+    public function deletePicture(Picture $picture, Request $request, Product $product) {
         $data = json_decode($request->getContent(), true);
 
-        //TODO = Deploy CSRF vs JWT
+        //TODO [UPGRADE] = Deploy CSRF vs JWT
         // Check if token is valid
-        // if($this->isCsrfTokenValid('delete'.$picture->getId(), $data['_token'])) {
-            // Get the name of the picture
-            $url = $picture->getUrl();
 
-            // Delete the file
-            unlink($this->getParameter('pictures_directory').'/'.$url);            
+        // Get the name of the picture
+        $url = $picture->getUrl();
 
-            // Delete the entry in the database
-            $entityManager= $this->getDoctrine()->getManager();
-            $entityManager->remove($picture);
-            $entityManager->flush();
+        // Delete the file
+        unlink($this->getParameter('pictures_directory').'/'.$url);            
 
-            // Return a JSON response
-            // return new JsonResponse(['success' => 1]);
+        // Delete the entry in the database
+        $entityManager= $this->getDoctrine()->getManager();
+        $entityManager->remove($picture);
+        $entityManager->flush();
 
-            // TODO = Delete and Display PlaceHolders (no file stored)
-        // } else {
-            // return new JsonResponse(['error' => 'Invalid Token'], 400);
-        // }
-            
-        // TODO = REDIRECT TO PRDUCT VIEW
-        return new Response("Coucou!");
-
-        // TODO = UPDATE ENTITIES (Picture Relation to Product, delete product_picture)
+        
+        return $this->redirectToRoute('product_edit', ['id' => $product->getId()]);
+        
+        
+        // TODO [UPGRADE] = Delete and Display PlaceHolders (no file stored)
+        // TODO [UPGRADE] = UPDATE ENTITIES (Picture Relation to Product, delete product_picture)
     }
 }
